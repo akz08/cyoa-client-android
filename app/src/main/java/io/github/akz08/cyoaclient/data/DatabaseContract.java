@@ -36,11 +36,11 @@ public class DatabaseContract {
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY," +
-            COLUMN_NAME + TEXT_TYPE + COMMA_SEP +
-            COLUMN_AGE + TEXT_TYPE + COMMA_SEP +
-            COLUMN_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
-            COLUMN_PHOTO + BLOB_TYPE +
+                _ID + " INTEGER PRIMARY KEY," +
+                COLUMN_NAME + TEXT_TYPE + COMMA_SEP +
+                COLUMN_AGE + TEXT_TYPE + COMMA_SEP +
+                COLUMN_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
+                COLUMN_PHOTO + BLOB_TYPE +
             " )";
 
         // Delete table method
@@ -61,13 +61,11 @@ public class DatabaseContract {
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY," +
-            COLUMN_CHARACTER_ID + INTEGER_TYPE + COMMA_SEP +
-            COLUMN_SCENE_INFORMATION + TEXT_TYPE + COMMA_SEP +
-            " FOREIGN KEY (" + COLUMN_CHARACTER_ID + ") REFERENCES " +
-            CharacterEntry.TABLE_NAME + " (" + CharacterEntry._ID + "), " +
-            " UNIQUE (" + SceneEntry.COLUMN_CHARACTER_ID + ", " +
-            SceneEntry.COLUMN_SCENE_INFORMATION + ") ON CONFLICT REPLACE" +
+                _ID + " INTEGER PRIMARY KEY," +
+                COLUMN_CHARACTER_ID + INTEGER_TYPE + COMMA_SEP +
+                COLUMN_SCENE_INFORMATION + TEXT_TYPE + COMMA_SEP +
+                " FOREIGN KEY (" + COLUMN_CHARACTER_ID + ") REFERENCES " +
+                CharacterEntry.TABLE_NAME + " (" + CharacterEntry._ID + "), " +
             ");";
 
         // Delete table method
@@ -89,14 +87,12 @@ public class DatabaseContract {
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY," +
-            COLUMN_SCENE_ID + INTEGER_TYPE + COMMA_SEP +
-            COLUMN_MESSAGE_TEXT + TEXT_TYPE + COMMA_SEP +
-            COLUMN_MESSAGE_DATETIME + DATETIME_TYPE + AUTO_DATETIME + COMMA_SEP +
-            " FOREIGN KEY (" + COLUMN_SCENE_ID + ") REFERENCES " +
-            CharacterEntry.TABLE_NAME + " (" + CharacterEntry._ID + "), " +
-            " UNIQUE (" + MessageEntry.COLUMN_SCENE_ID + ", " +
-            MessageEntry.COLUMN_MESSAGE_DATETIME + ") ON CONFLICT REPLACE" +
+                _ID + " INTEGER PRIMARY KEY," +
+                COLUMN_SCENE_ID + INTEGER_TYPE + COMMA_SEP +
+                COLUMN_MESSAGE_TEXT + TEXT_TYPE + COMMA_SEP +
+                COLUMN_MESSAGE_DATETIME + DATETIME_TYPE + AUTO_DATETIME + COMMA_SEP +
+                " FOREIGN KEY (" + COLUMN_SCENE_ID + ") REFERENCES " +
+                CharacterEntry.TABLE_NAME + " (" + CharacterEntry._ID + "), " +
             ");";
 
         // Delete table method
@@ -119,15 +115,13 @@ public class DatabaseContract {
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY," +
-            COLUMN_MESSAGE_ID + INTEGER_TYPE + COMMA_SEP +
-            COLUMN_CHOICE_TEXT + TEXT_TYPE + COMMA_SEP +
-            COLUMN_CHOICE_DATETIME + DATETIME_TYPE + AUTO_DATETIME + COMMA_SEP +
-            COLUMN_CHOICE_SELECTED + INTEGER_TYPE + COMMA_SEP +
-            " FOREIGN KEY (" + COLUMN_MESSAGE_ID + ") REFERENCES " +
-            MessageEntry.TABLE_NAME + " (" + MessageEntry._ID + "), " +
-            " UNIQUE (" + ChoiceEntry.COLUMN_MESSAGE_ID + ", " +
-            ChoiceEntry.COLUMN_CHOICE_DATETIME + ") ON CONFLICT REPLACE" +
+                _ID + " INTEGER PRIMARY KEY," +
+                COLUMN_MESSAGE_ID + INTEGER_TYPE + COMMA_SEP +
+                COLUMN_CHOICE_TEXT + TEXT_TYPE + COMMA_SEP +
+                COLUMN_CHOICE_DATETIME + DATETIME_TYPE + AUTO_DATETIME + COMMA_SEP +
+                COLUMN_CHOICE_SELECTED + INTEGER_TYPE + COMMA_SEP +
+                " FOREIGN KEY (" + COLUMN_MESSAGE_ID + ") REFERENCES " +
+                MessageEntry.TABLE_NAME + " (" + MessageEntry._ID + "), " +
             ");";
 
         // Delete table method
