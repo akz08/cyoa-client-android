@@ -114,6 +114,7 @@ public class DatabaseContract {
         public static final String COLUMN_MESSAGE_ID = "message_id";
         public static final String COLUMN_CHOICE_TEXT = "choice_text";
         public static final String COLUMN_CHOICE_DATETIME = "choice_datetime";
+        public static final String COLUMN_CHOICE_SELECTED = "choice_selected";
 
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
@@ -122,6 +123,7 @@ public class DatabaseContract {
             COLUMN_MESSAGE_ID + INTEGER_TYPE + COMMA_SEP +
             COLUMN_CHOICE_TEXT + TEXT_TYPE + COMMA_SEP +
             COLUMN_CHOICE_DATETIME + DATETIME_TYPE + AUTO_DATETIME + COMMA_SEP +
+            COLUMN_CHOICE_SELECTED + INTEGER_TYPE + COMMA_SEP +
             " FOREIGN KEY (" + COLUMN_MESSAGE_ID + ") REFERENCES " +
             MessageEntry.TABLE_NAME + " (" + MessageEntry._ID + "), " +
             " UNIQUE (" + ChoiceEntry.COLUMN_MESSAGE_ID + ", " +
