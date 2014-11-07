@@ -4,7 +4,8 @@ Feature: Messaging
 	I want to receive messages from them and choose responses to their messages
 
 	Background:
-		Given there is a character named "Otis"
+		Given I am connected to the internet
+		And there is a character named "Otis"
 		And there is a message with text "To be or not to be?" and choices "To be." and "Not to be." available
 		And the choice "To be." leads to a message with text "Great!" and delay of "5" seconds
 
