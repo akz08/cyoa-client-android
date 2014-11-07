@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DatabaseContract.CharacterEntry.CREATE_TABLE);
+        db.execSQL(DatabaseContract.SceneEntry.CREATE_TABLE);
         db.execSQL(DatabaseContract.MessageEntry.CREATE_TABLE);
         db.execSQL(DatabaseContract.ChoiceEntry.CREATE_TABLE);
     }
@@ -23,6 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DatabaseContract.CharacterEntry.DELETE_TABLE);
+        db.execSQL(DatabaseContract.MessageEntry.DELETE_TABLE);
         db.execSQL(DatabaseContract.MessageEntry.DELETE_TABLE);
         db.execSQL(DatabaseContract.ChoiceEntry.DELETE_TABLE);
         onCreate(db);

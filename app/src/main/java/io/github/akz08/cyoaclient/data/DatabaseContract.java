@@ -49,13 +49,40 @@ public class DatabaseContract {
     }
 
     /*
+     * Fields and create/delete methods associated with the 'scene' table.
+     */
+    public static final class SceneEntry implements BaseColumns {
+
+        // Table fields
+        public static final String TABLE_NAME = "scene";
+        public static final String COLUMN_CHARACTER_ID = "character_id";
+        public static final String COLUMN_SCENE_INFORMATION = "scene_information";
+
+        // Create table method
+        public static final String CREATE_TABLE = "CREATE TABLE " +
+            TABLE_NAME + " (" +
+            _ID + " INTEGER PRIMARY KEY," +
+            COLUMN_CHARACTER_ID + INTEGER_TYPE + COMMA_SEP +
+            COLUMN_SCENE_INFORMATION + TEXT_TYPE + COMMA_SEP +
+            " FOREIGN KEY (" + COLUMN_CHARACTER_ID + ") REFERENCES " +
+            CharacterEntry.TABLE_NAME + " (" + CharacterEntry._ID + "), " +
+            " UNIQUE (" + SceneEntry.COLUMN_CHARACTER_ID + ", " +
+            SceneEntry.COLUMN_SCENE_INFORMATION + ") ON CONFLICT REPLACE" +
+            ");";
+
+        // Delete table method
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+    }
+
+    /*
      * Fields and create/delete methods associated with the 'message' table.
      */
     public static final class MessageEntry implements BaseColumns {
 
         // Table fields
         public static final String TABLE_NAME = "message";
-        public static final String COLUMN_CHARACTER_ID = "character_id";
+        public static final String COLUMN_SCENE_ID = "scene_id";
         public static final String COLUMN_MESSAGE_TEXT = "message_text";
         public static final String COLUMN_MESSAGE_DATETIME = "message_datetime";
 
@@ -63,12 +90,12 @@ public class DatabaseContract {
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY," +
-            COLUMN_CHARACTER_ID + INTEGER_TYPE + COMMA_SEP +
+            COLUMN_SCENE_ID + INTEGER_TYPE + COMMA_SEP +
             COLUMN_MESSAGE_TEXT + TEXT_TYPE + COMMA_SEP +
             COLUMN_MESSAGE_DATETIME + DATETIME_TYPE + AUTO_DATETIME + COMMA_SEP +
-            " FOREIGN KEY (" + COLUMN_CHARACTER_ID + ") REFERENCES " +
+            " FOREIGN KEY (" + COLUMN_SCENE_ID + ") REFERENCES " +
             CharacterEntry.TABLE_NAME + " (" + CharacterEntry._ID + "), " +
-            " UNIQUE (" + MessageEntry.COLUMN_CHARACTER_ID + ", " +
+            " UNIQUE (" + MessageEntry.COLUMN_SCENE_ID + ", " +
             MessageEntry.COLUMN_MESSAGE_DATETIME + ") ON CONFLICT REPLACE" +
             ");";
 
