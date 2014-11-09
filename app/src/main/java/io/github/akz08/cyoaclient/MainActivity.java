@@ -9,7 +9,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.widget.LoginButton;
+
+import java.util.Arrays;
+
+
 public class MainActivity extends ActionBarActivity {
+
+    private MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,8 +24,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new MainFragment())
                     .commit();
+        } else {
+            mainFragment = (MainFragment) getSupportFragmentManager()
+                    .findFragmentById(android.R.id.content);
         }
     }
 
@@ -44,15 +54,19 @@ public class MainActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class MainFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public MainFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            LoginButton authButton = (LoginButton) rootView.findViewById(R.id.authButton);
+            authButton.setFragment(this);
+            authButton.setReadPermissions(Arrays.asList("email", "public_profile"));
             return rootView;
         }
     }
