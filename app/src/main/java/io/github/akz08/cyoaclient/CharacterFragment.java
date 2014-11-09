@@ -1,6 +1,8 @@
 package io.github.akz08.cyoaclient;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import io.github.akz08.cyoaclient.data.DatabaseContract;
+import io.github.akz08.cyoaclient.data.DatabaseHelper;
 
 public class CharacterFragment extends Fragment {
 
@@ -63,8 +68,26 @@ public class CharacterFragment extends Fragment {
 
         @Override
         protected String[] doInBackground(Void... params) {
-            String[] characterNames = new String[] {"Claire"};
-            return characterNames;
+            DatabaseHelper databaseHelper = new DatabaseHelper(getActivity().getApplicationContext());
+            SQLiteDatabase database = databaseHelper.getWritableDatabase();
+            String characterName = DatabaseContract.CharacterEntry.COLUMN_NAME;
+            Cursor queryResults = database.query(
+                DatabaseContract.CharacterEntry.TABLE_NAME,
+                new String[] {DatabaseContract.CharacterEntry.COLUMN_NAME},
+                null,
+                null,
+                null,
+                null,
+                null
+            );
+            int numNames = queryResults.getCount();
+            String[] names = new String[numNames];
+            queryResults.moveToFirst();
+            for (int i = 0; i < numNames; i++) {
+                names[i] = queryResults.getString(queryResults.getColumnIndex(DatabaseContract.CharacterEntry.COLUMN_NAME));
+                queryResults.moveToNext();
+            }
+            return names;
         }
 
         @Override
