@@ -7,3 +7,4 @@
 /build
 /calabash/test_servers
 /calabash/*.png
+/facebook/build
