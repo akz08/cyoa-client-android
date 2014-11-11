@@ -13,7 +13,7 @@ public class CharacterSelectActivity extends ActionBarActivity {
         setContentView(R.layout.activity_character_select);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new CharacterFragment())
+                .add(R.id.container, new CharacterSelectFragment())
                 .commit();
         }
     }
