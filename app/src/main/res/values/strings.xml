@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <string name="facebook_app_id">725312227561858</string>
 
     <string name="app_name">CYOA Client</string>
     <string name="hello_world">Hello world!</string>
