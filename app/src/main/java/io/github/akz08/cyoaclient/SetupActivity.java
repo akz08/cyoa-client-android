@@ -9,6 +9,11 @@ public class SetupActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                .add(R.id.activity_setup_container, new UserHistoryFragment())
+                .commit();
+        }
     }
 
 }

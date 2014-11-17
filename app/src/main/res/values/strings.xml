@@ -11,4 +11,11 @@
     <string name="title_activity_setup">SetupActivity</string>
     <string name="title_activity_main">MainActivity</string>
 
+    <string name="user_history_info">Our records indicate that you have installed this app before.</string>
+    <string name="user_history_resume_progress">Continue progress?</string>
+    <string name="user_history_resume_progress_warning">(Note: by choosing not to continue, your progress will be reset permanently.)</string>
+    <string name="user_history_redo_tutorial">Redo tutorial?</string>
+    <string name="user_history_redo_tutorial_warning">(Note: you will still be able to do the tutorial later.)</string>
+    <string name="user_history_continue">Continue</string>
+
 </resources>
