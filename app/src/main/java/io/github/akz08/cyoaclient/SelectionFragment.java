@@ -2,13 +2,11 @@ package io.github.akz08.cyoaclient;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +18,8 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class SelectionFragment extends Fragment {
 
@@ -44,7 +35,7 @@ public class SelectionFragment extends Fragment {
     private String fb_user_id = null;
     private String fb_user_first_name = null;
     private String fb_user_last_name = null;
-    private final String fb_app_id = Session.getActiveSession().getApplicationId();
+    private String fb_user_email = null;
     private final String fb_access_token = Session.getActiveSession().getAccessToken();
 
     public SelectionFragment() {}
@@ -135,6 +126,12 @@ public class SelectionFragment extends Fragment {
                             fb_user_id = user.getId();
                             fb_user_first_name = user.getFirstName();
                             fb_user_last_name = user.getLastName();
+                            fb_user_email = user.getProperty("email").toString();
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            prefs.edit().putString("fb_user_id", fb_user_id).commit();
+                            prefs.edit().putString("fb_user_first_name", fb_user_first_name).commit();
+                            prefs.edit().putString("fb_user_last_name", fb_user_last_name).commit();
+                            prefs.edit().putString("fb_user_email", fb_user_email).commit();
                         }
                     }
                     if (response.getError() != null) {
@@ -145,46 +142,30 @@ public class SelectionFragment extends Fragment {
         request.executeAsync();
     }
 
-    private class FetchUserHistoryTask extends AsyncTask<Void, Void, Boolean> {
+    private class FetchUserHistoryTask extends AsyncTask<Void, Void, String> {
 
         private final String LOG_TAG = FetchUserHistoryTask.class.getSimpleName();
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-            String authJsonStr = null;
+            return "201";
+            /*
             try {
                 // Construct the URL for the API query
                 Uri builtUri = Uri.parse("http://localhost:8000/authenticate");
                 URL url = new URL(builtUri.toString());
                 // Create the request to the API, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("fb_app_id", fb_app_id);
-                urlConnection.setRequestProperty("fb_user_id", fb_user_id);
-                urlConnection.setRequestProperty("fb_access_token", fb_access_token);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("uid", fb_user_id);
+                urlConnection.setRequestProperty("first_names", fb_user_first_name);
+                urlConnection.setRequestProperty("last_name", fb_user_last_name);
+                urlConnection.setRequestProperty("email", fb_user_email);
+                urlConnection.setRequestProperty("fb_token", fb_access_token);
                 urlConnection.connect();
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null) {
-                    // Nothing to do
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed buffer for debugging
-                    buffer.append(line + "\n");
-                }
-                if (buffer.length() == 0) {
-                    // Stream was empty - no point in parsing
-                    return null;
-                }
-                // Set the final JSON result
-                authJsonStr = buffer.toString();
+                return Integer.toString(urlConnection.getResponseCode());
             }
             catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
@@ -202,31 +183,18 @@ public class SelectionFragment extends Fragment {
                         Log.e(LOG_TAG, "Error closing stream", e);
                     }
                 }
+                return null;
             }
-            // Process the JSON string, and return the corresponding boolean flag
-            try {
-                return getAuthDataFromJson(authJsonStr);
-            }
-            catch (JSONException e) {
-                Log.e(LOG_TAG, e.getMessage(), e);
-                e.printStackTrace();
-            }
-            // This will only happen if there was an error getting or parsing the JSON string
-            return null;
+            */
         }
 
         @Override
-        protected void onPostExecute(Boolean isAuth) {
+        protected void onPostExecute(String result) {
             Intent intent = new Intent(getActivity(), SetupActivity.class);
-            intent.putExtra("io.github.akz08.cyoaclient.is_auth", isAuth);
+            intent.putExtra("io.github.akz08.cyoaclient.response_code", result);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             getActivity().finish();
-        }
-
-        private boolean getAuthDataFromJson(String authJsonStr) throws JSONException {
-            JSONObject authJsonObj = new JSONObject(authJsonStr);
-            return authJsonObj.getBoolean("is_auth");
         }
 
     }

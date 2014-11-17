@@ -10,21 +10,24 @@ public class SetupActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
         if (savedInstanceState == null) {
-            // Get boolean flag indicating whether or not the user has existing progress
-            Boolean isAuth = getIntent().getBooleanExtra("io.github.akz08.cyoaclient.is_auth", false);
-            if (isAuth) {
+            // Get response code indicating whether or not the user has existing progress
+            String responseCode = getIntent().getStringExtra("io.github.akz08.cyoaclient.response_code");
+            if (responseCode.equals("201")) {
                 // Notify user of options regarding existing progress
                 getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_setup_container, new UserHistoryFragment())
                     .commit();
             }
-            else {
+            else if (responseCode.equals("200")) {
                 // Setup a fresh database
                 /*
                 getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_setup_container, new DatabaseSetupFragment())
                     .commit();
                 */
+            }
+            else {
+                // Handle error
             }
         }
     }
