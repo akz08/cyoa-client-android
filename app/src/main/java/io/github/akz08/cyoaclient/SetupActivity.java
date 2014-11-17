@@ -10,9 +10,22 @@ public class SetupActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_setup_container, new UserHistoryFragment())
-                .commit();
+            // Get boolean flag indicating whether or not the user has existing progress
+            Boolean isAuth = getIntent().getBooleanExtra("io.github.akz08.cyoaclient.is_auth", false);
+            if (isAuth) {
+                // Notify user of options regarding existing progress
+                getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_setup_container, new UserHistoryFragment())
+                    .commit();
+            }
+            else {
+                // Setup a fresh database
+                /*
+                getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_setup_container, new DatabaseSetupFragment())
+                    .commit();
+                */
+            }
         }
     }
 

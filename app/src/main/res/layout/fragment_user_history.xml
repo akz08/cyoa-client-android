@@ -68,5 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
+        android:textColor="#0099cc"
+        android:background="#0000"
         android:text="@string/user_history_continue"/>
 </LinearLayout>
