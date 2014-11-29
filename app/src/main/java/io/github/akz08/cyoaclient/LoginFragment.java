@@ -143,17 +143,17 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private class AuthenticationTask extends AsyncTask<Void, Void, String> {
+    private class AuthenticationTask extends AsyncTask<Void, Void, Integer> {
 
         private final String LOG_TAG = AuthenticationTask.class.getSimpleName();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Integer doInBackground(Void... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-            String responseCode = null;
+            int responseCode = 0;
             try {
                 // Construct the URL for the API query
                 Uri builtUri = Uri.parse("http://192.168.1.128:8000/v0.1/auth");
@@ -178,12 +178,10 @@ public class LoginFragment extends Fragment {
                 os.close();
                 // Send the request
                 urlConnection.connect();
-                responseCode = Integer.toString(urlConnection.getResponseCode());
+                responseCode = urlConnection.getResponseCode();
             }
             catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
-                // If the code didn't successfully get the data, there's no point in attemping to parse it
-                return null;
             }
             finally {
                 if (urlConnection != null) {
@@ -201,8 +199,7 @@ public class LoginFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            Log.d(LOG_TAG, "Response code is: " + result);
+        protected void onPostExecute(Integer result) {
             Intent intent = new Intent(getActivity(), SetupActivity.class);
             intent.putExtra("io.github.akz08.cyoaclient.response_code", result);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

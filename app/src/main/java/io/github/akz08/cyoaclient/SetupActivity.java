@@ -11,24 +11,23 @@ public class SetupActivity extends FragmentActivity {
         setContentView(R.layout.activity_setup);
         if (savedInstanceState == null) {
             // Get response code indicating whether or not the user has existing progress
-            String responseCode = getIntent().getStringExtra("io.github.akz08.cyoaclient.response_code");
-            if (responseCode.equals("200")) {
-                /*
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-                prefs.edit().putBoolean("is_first_run", false).apply();
-                */
+            int responseCode = getIntent().getIntExtra("io.github.akz08.cyoaclient.response_code", 0);
+            if (responseCode == 200) {
                 // Notify user of options regarding existing progress
                 getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_setup_container, new UserHistoryFragment())
+                    .add(R.id.activity_setup_container, new ReturningUserFragment())
                     .commit();
             }
-            else if (responseCode.equals("201")) {
-                // Setup a fresh database
-                /*
+            else if (responseCode == 201) {
+                // Setup a fresh database with tutorial to follow
+                DatabaseSetupFragment databaseSetup = new DatabaseSetupFragment();
+                Bundle setupArgs = new Bundle();
+                setupArgs.putBoolean("io.github.akz08.cyoaclient.continue_progress", true);
+                setupArgs.putBoolean("io.github.akz08.cyoaclient.redo_tutorial", true);
+                databaseSetup.setArguments(setupArgs);
                 getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_setup_container, new DatabaseSetupFragment())
+                    .add(R.id.activity_setup_container, databaseSetup)
                     .commit();
-                */
             }
         }
     }

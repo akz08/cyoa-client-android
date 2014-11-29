@@ -7,12 +7,12 @@
     android:layout_gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="40dp"
-    tools:context="io.github.akz08.cyoaclient.UserHistoryFragment">
+    tools:context="io.github.akz08.cyoaclient.ReturningUserFragment">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/user_history_info"/>
+        android:text="@string/returning_user_info"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,9 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/user_history_resume_progress"/>
+            android:text="@string/returning_user_resume_progress"/>
         <CheckBox
-            android:id="@+id/user_history_continue_progress_checkbox"
+            android:id="@+id/returning_user_continue_progress_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -37,7 +37,7 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="20dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/user_history_resume_progress_warning"/>
+        android:text="@string/returning_user_resume_progress_warning"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,9 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/user_history_redo_tutorial"/>
+            android:text="@string/returning_user_redo_tutorial"/>
         <CheckBox
-            android:id="@+id/user_history_redo_tutorial_checkbox"
+            android:id="@+id/returning_user_redo_tutorial_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -62,13 +62,15 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="20dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/user_history_redo_tutorial_warning"/>
+        android:text="@string/returning_user_redo_tutorial_warning"/>
     <Button
+        android:id="@+id/returning_user_continue_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:textColor="#0099cc"
         android:background="#0000"
-        android:text="@string/user_history_continue"/>
+        android:text="@string/returning_user_continue"
+        android:onClick="handleProgress"/>
 </LinearLayout>
