@@ -1,5 +1,6 @@
 package io.github.akz08.cyoaclient;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -32,7 +33,31 @@ import io.github.akz08.cyoaclient.data.DatabaseHelper;
 
 public class DatabaseSetupFragment extends Fragment {
 
-    public DatabaseSetupFragment() {}
+    private OnDatabaseSetupFinishListener mCallback;
+
+    public interface OnDatabaseSetupFinishListener {
+        public void onDatabaseSetupFinish();
+    }
+
+    public static final DatabaseSetupFragment newInstance(boolean continueProgress) {
+        DatabaseSetupFragment fragment = new DatabaseSetupFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("io.github.akz08.cyoaclient.continue_progress", continueProgress);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // This makes sure that the container activity has implemented the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnDatabaseSetupFinishListener) activity;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnDatabaseSetupFinishListener");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +65,6 @@ public class DatabaseSetupFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle != null) {
             boolean continueProgress = bundle.getBoolean("io.github.akz08.cyoaclient.continue_progress");
-            boolean redoTutorial = bundle.getBoolean("io.github.akz08.cyoaclient.redo_tutorial");
             if (!continueProgress) {
                 new EraseProgressTask().execute();
             }
@@ -115,7 +139,6 @@ public class DatabaseSetupFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            // Create the database with clean data
             new FetchProgressTask().execute();
         }
 
@@ -205,12 +228,7 @@ public class DatabaseSetupFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            // Set the shared preferences to indicate that the application has been run
-            prefs.edit().putBoolean("is_first_run", false).apply();
-            // Launch the tutorial
-            getFragmentManager().beginTransaction()
-                .replace(R.id.activity_setup_container, new TutorialFragment())
-                .commit();
+            mCallback.onDatabaseSetupFinish();
         }
 
         private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {

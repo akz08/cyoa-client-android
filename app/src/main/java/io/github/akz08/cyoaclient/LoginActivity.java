@@ -12,13 +12,15 @@ public class LoginActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
-            loginFragment = new LoginFragment();
-            getSupportFragmentManager().beginTransaction().add(android.R.id.content, loginFragment).commit();
+            loginFragment = LoginFragment.newInstance();
         }
         else {
             // Or set the fragment from restored state info
             loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
         }
+        getSupportFragmentManager().beginTransaction()
+            .add(android.R.id.content, loginFragment)
+            .commit();
     }
 
 }

@@ -1,5 +1,6 @@
 package io.github.akz08.cyoaclient;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,10 +11,32 @@ import android.widget.CheckBox;
 
 public class ReturningUserFragment extends Fragment {
 
-    public ReturningUserFragment() {}
+    private OnReturningUserFinishListener mCallback;
+
+    public interface OnReturningUserFinishListener {
+        public void onReturningUserFinish(boolean continueProgress, boolean redoTutorial);
+    }
+
+    public static final ReturningUserFragment newInstance() {
+        ReturningUserFragment fragment = new ReturningUserFragment();
+        return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // This makes sure that the container activity has implemented the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnReturningUserFinishListener) activity;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnReturningUserFinishListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_returning_user, container, false);
         // Handle the button click event
         Button button = (Button) getView().findViewById(R.id.returning_user_continue_button);
@@ -25,15 +48,8 @@ public class ReturningUserFragment extends Fragment {
                 // Check whether the user wants to redo the tutorial
                 CheckBox redoTutorialBox = (CheckBox) getView().findViewById(R.id.returning_user_redo_tutorial_checkbox);
                 boolean redoTutorial = redoTutorialBox.isChecked();
-                // Launch a new fragment to setup the database with the corresponding options
-                DatabaseSetupFragment databaseSetup = new DatabaseSetupFragment();
-                Bundle setupArgs = new Bundle();
-                setupArgs.putBoolean("io.github.akz08.cyoaclient.continue_progress", continueProgress);
-                setupArgs.putBoolean("io.github.akz08.cyoaclient.redo_tutorial", redoTutorial);
-                databaseSetup.setArguments(setupArgs);
-                getFragmentManager().beginTransaction()
-                    .replace(R.id.activity_setup_container, databaseSetup)
-                    .commit();
+                // Notify the parent activity of the options selected, and to take further action
+                mCallback.onReturningUserFinish(continueProgress, redoTutorial);
             }
         });
         return view;

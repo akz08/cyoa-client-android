@@ -46,7 +46,10 @@ public class LoginFragment extends Fragment {
         }
     };
 
-    public LoginFragment() {}
+    public static final LoginFragment newInstance() {
+        LoginFragment fragment = new LoginFragment();
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -20,4 +20,7 @@
 
     <string name="database_setup_info">Setting things up for you...</string>
 
+    <string name="tutorial_info">Tutorial goes here</string>
+    <string name="tutorial_skip">Skip</string>
+
 </resources>
