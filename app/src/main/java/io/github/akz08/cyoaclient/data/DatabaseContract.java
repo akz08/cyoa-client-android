@@ -35,19 +35,20 @@ public class DatabaseContract {
 
         // Table fields
         public static final String TABLE_NAME = "character";
-        public static final String COLUMN_NAME = "character_name";
-        public static final String COLUMN_AGE = "character_age";
-        public static final String COLUMN_DESCRIPTION = "character_description";
-        public static final String COLUMN_PHOTO = "character_photo";
+        public static final String COLUMN_CHARACTER_ID = "character_id";
+        public static final String COLUMN_CHARACTER_NAME = "character_name";
+        public static final String COLUMN_CHARACTER_AGE = "character_age";
+        public static final String COLUMN_CHARACTER_DESCRIPTION = "character_description";
+        public static final String COLUMN_CHARACTER_PHOTO = "character_photo";
 
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + L_PAREN +
-                _ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
-                COLUMN_NAME + TEXT_TYPE + COMMA_SEP +
-                COLUMN_AGE + TEXT_TYPE + COMMA_SEP +
-                COLUMN_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
-                COLUMN_PHOTO + BLOB_TYPE +
+                COLUMN_CHARACTER_ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
+                COLUMN_CHARACTER_NAME + TEXT_TYPE + COMMA_SEP +
+                COLUMN_CHARACTER_AGE + TEXT_TYPE + COMMA_SEP +
+                COLUMN_CHARACTER_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
+                COLUMN_CHARACTER_PHOTO + BLOB_TYPE +
             R_PAREN + SEMI_COLON;
 
         // Delete table method
@@ -62,13 +63,14 @@ public class DatabaseContract {
 
         // Table fields
         public static final String TABLE_NAME = "scene";
+        public static final String COLUMN_SCENE_ID = "scene_id";
         public static final String COLUMN_CHARACTER_ID = "character_id";
         public static final String COLUMN_SCENE_INFORMATION = "scene_information";
 
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + L_PAREN +
-                _ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
+                COLUMN_SCENE_ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                 COLUMN_CHARACTER_ID + INTEGER_TYPE + COMMA_SEP +
                 COLUMN_SCENE_INFORMATION + TEXT_TYPE + COMMA_SEP +
                 FOREIGN_KEY + L_PAREN + COLUMN_CHARACTER_ID + R_PAREN + REFERENCES +
@@ -87,6 +89,7 @@ public class DatabaseContract {
 
         // Table fields
         public static final String TABLE_NAME = "message";
+        public static final String COLUMN_MESSAGE_ID = "message_id";
         public static final String COLUMN_SCENE_ID = "scene_id";
         public static final String COLUMN_MESSAGE_TEXT = "message_text";
         public static final String COLUMN_MESSAGE_DATETIME = "message_datetime";
@@ -94,7 +97,7 @@ public class DatabaseContract {
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + L_PAREN +
-                _ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
+                COLUMN_MESSAGE_ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                 COLUMN_SCENE_ID + INTEGER_TYPE + COMMA_SEP +
                 COLUMN_MESSAGE_TEXT + TEXT_TYPE + COMMA_SEP +
                 COLUMN_MESSAGE_DATETIME + TEXT_TYPE + COMMA_SEP +
@@ -114,6 +117,7 @@ public class DatabaseContract {
 
         // Table fields
         public static final String TABLE_NAME = "choice";
+        public static final String COLUMN_CHOICE_ID = "choice_id";
         public static final String COLUMN_MESSAGE_ID = "message_id";
         public static final String COLUMN_CHOICE_TEXT = "choice_text";
         public static final String COLUMN_CHOICE_SELECTED_DATETIME = "choice_selected_datetime";
@@ -121,7 +125,7 @@ public class DatabaseContract {
         // Create table method
         public static final String CREATE_TABLE = "CREATE TABLE " +
             TABLE_NAME + L_PAREN +
-                _ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
+                COLUMN_CHOICE_ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                 COLUMN_MESSAGE_ID + INTEGER_TYPE + COMMA_SEP +
                 COLUMN_CHOICE_TEXT + TEXT_TYPE + COMMA_SEP +
                 COLUMN_CHOICE_SELECTED_DATETIME + TEXT_TYPE + COMMA_SEP +
