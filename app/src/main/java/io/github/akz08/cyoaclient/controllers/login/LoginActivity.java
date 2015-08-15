@@ -1,6 +1,7 @@
 package io.github.akz08.cyoaclient.controllers.login;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -25,15 +26,17 @@ public class LoginActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
         callbackManager = CallbackManager.Factory.create();
+
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                Log.v("LoginActivity", "Login successful.");
                 // App code
                 GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
@@ -41,13 +44,10 @@ public class LoginActivity extends Activity
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
                             // App code
-                            Log.d("LoginActivity", "Login success.");
-                            Log.d("LoginActivity", "GraphRequest: " + response.toString());
+                            Log.v("LoginActivity", "User profile request successful.");
+                            Log.v("LoginActivity", response.toString());
                         }
                     });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender, birthday");
-                request.setParameters(parameters);
                 request.executeAsync();
             }
 
@@ -63,5 +63,11 @@ public class LoginActivity extends Activity
                 Log.v("LoginActivity", "Login error: " + exception.getCause().toString());
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }
