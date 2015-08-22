@@ -23,22 +23,15 @@ import retrofit.client.Response;
 
 public class AuthenticationFragment extends Fragment {
 
-    private static final String ARG_PARAM = "fb_access_token";
-
     private final String LOG_TAG = getClass().getSimpleName();
     private OnAuthenticationFragmentInteractionListener mListener;
-    private String fbAccessToken;
 
     public interface OnAuthenticationFragmentInteractionListener {
-        public void onAuthenticationFragmentInteraction(int authenticationStatus);
+        void onAuthenticationFragmentInteraction(int authenticationStatus);
     }
 
-    public static AuthenticationFragment newInstance(String fbAccessToken) {
-        AuthenticationFragment fragment = new AuthenticationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM, fbAccessToken);
-        fragment.setArguments(args);
-        return fragment;
+    public static AuthenticationFragment newInstance() {
+        return new AuthenticationFragment();
     }
 
     @Override
@@ -49,14 +42,6 @@ public class AuthenticationFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                 + " must implement OnAuthenticationFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            fbAccessToken = getArguments().getString(ARG_PARAM);
         }
     }
 
@@ -83,7 +68,6 @@ public class AuthenticationFragment extends Fragment {
         User user = realm.where(User.class).findFirst();
         long userId = user.getId();
         Map<String, String> body = new HashMap<String, String>();
-        body.put("fb_access_token", fbAccessToken);
         body.put("first_name", user.getFirstName());
         body.put("last_name", user.getLastName());
         body.put("email", user.getEmail());
@@ -111,7 +95,17 @@ public class AuthenticationFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError e) {
-                Log.v(LOG_TAG, "User authentication error: " + e.getMessage());
+                final String error = "User authentication error: ";
+
+                if (e.getKind() == RetrofitError.Kind.CONVERSION) {
+                    Log.v(LOG_TAG, error + "conversion error");
+                } else if (e.getKind() == RetrofitError.Kind.HTTP) {
+                    Log.v(LOG_TAG, error + "HTTP error");
+                } else if (e.getKind() == RetrofitError.Kind.NETWORK) {
+                    Log.v(LOG_TAG, error + "network error");
+                } else if (e.getKind() == RetrofitError.Kind.UNEXPECTED) {
+                    Log.v(LOG_TAG, error + "unexpected error");
+                }
             }
         });
     }

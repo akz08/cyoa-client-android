@@ -1,9 +1,13 @@
 package io.github.akz08.cyoaclient.models;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Character extends RealmObject {
+
+    // Attributes
+
     @PrimaryKey
     private int id;
     private String name;
@@ -25,4 +29,11 @@ public class Character extends RealmObject {
 
     public String getDescription() { return description; }
     public void setDescription(final String description) { this.description = description; }
+
+    // Relationships
+
+    private RealmList<Scene> scenes;
+
+    public RealmList<Scene> getScenes() { return scenes; }
+    public void setScenes(final RealmList<Scene> scenes) { this.scenes = scenes; }
 }

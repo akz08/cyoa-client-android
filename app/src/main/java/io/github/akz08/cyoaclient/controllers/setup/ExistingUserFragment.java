@@ -17,7 +17,7 @@ public class ExistingUserFragment extends Fragment {
     private OnExistingUserFragmentInteractionListener mListener;
 
     public interface OnExistingUserFragmentInteractionListener {
-        public void onExistingUserFragmentInteraction(boolean resumeProgress);
+        void onExistingUserFragmentInteraction(boolean resumeProgress);
     }
 
     public static ExistingUserFragment newInstance() { return new ExistingUserFragment(); }

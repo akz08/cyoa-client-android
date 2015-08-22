@@ -34,7 +34,7 @@ public class SetupFragment extends Fragment {
     private boolean resumeProgress;
 
     public interface OnSetupFragmentInteractionListener {
-        public void onSetupFragmentInteraction();
+        void onSetupFragmentInteraction();
     }
 
     public static SetupFragment newInstance(boolean resumeProgress) {
@@ -101,14 +101,26 @@ public class SetupFragment extends Fragment {
 
         // Make the request and handle the response
         service.reset(userId, body, new Callback<Void>() {
-            public void success(Void successful, Response response) {
-                Log.v(LOG_TAG, "User progress reset");
+            public void success(Void noResponse, Response response) {
+                if (response.getStatus() == 204) {
+                    Log.v(LOG_TAG, "User progress reset");
+                }
                 setupCharacters();
             }
 
             @Override
             public void failure(RetrofitError e) {
-                Log.v(LOG_TAG, "User progress reset error: " + e.getMessage());
+                final String error = "User progress reset error: ";
+
+                if (e.getKind() == RetrofitError.Kind.CONVERSION) {
+                    Log.v(LOG_TAG, error + "conversion error");
+                } else if (e.getKind() == RetrofitError.Kind.HTTP) {
+                    Log.v(LOG_TAG, error + "HTTP error");
+                } else if (e.getKind() == RetrofitError.Kind.NETWORK) {
+                    Log.v(LOG_TAG, error + "network error");
+                } else if (e.getKind() == RetrofitError.Kind.UNEXPECTED) {
+                    Log.v(LOG_TAG, error + "unexpected error");
+                }
             }
         });
     }
@@ -134,10 +146,12 @@ public class SetupFragment extends Fragment {
             public void success(List<Character> characters, Response response) {
                 Log.v(LOG_TAG, "Character records retrieved");
                 Realm realm = Realm.getInstance(getActivity());
+                User user = realm.where(User.class).findFirst();
                 Gson gson = new Gson();
                 for (Character character : characters) {
                     realm.beginTransaction();
                     realm.copyToRealmOrUpdate(character);
+                    user.getCharacters().add(character);
                     realm.commitTransaction();
                     Log.v(LOG_TAG, "Character record saved: " + gson.toJson(character));
                 }
@@ -148,7 +162,17 @@ public class SetupFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError e) {
-                Log.v(LOG_TAG, "Character records retrieval error: " + e.getMessage());
+                final String error = "Character setup error: ";
+
+                if (e.getKind() == RetrofitError.Kind.CONVERSION) {
+                    Log.v(LOG_TAG, error + "conversion error");
+                } else if (e.getKind() == RetrofitError.Kind.HTTP) {
+                    Log.v(LOG_TAG, error + "HTTP error");
+                } else if (e.getKind() == RetrofitError.Kind.NETWORK) {
+                    Log.v(LOG_TAG, error + "network error");
+                } else if (e.getKind() == RetrofitError.Kind.UNEXPECTED) {
+                    Log.v(LOG_TAG, error + "unexpected error");
+                }
             }
         });
     }

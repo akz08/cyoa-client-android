@@ -34,43 +34,53 @@ public class LoginActivity extends Activity {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        callbackManager = CallbackManager.Factory.create();
+        if (isLoggedIn()) {
+            onLogin();
+        } else {
+            setContentView(R.layout.activity_login);
 
-        setContentView(R.layout.activity_login);
+            callbackManager = CallbackManager.Factory.create();
 
-        // Attach additional permissions to the login button
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+            // Attach additional permissions to the login button
+            LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+            loginButton.setReadPermissions("email");
 
-        // Attach a callback to the login button that will handle the login request and response
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(final LoginResult loginResult) {
-                Log.v(LOG_TAG, "Login successful");
+            // Attach a callback to the login button that will handle the login request and response
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(final LoginResult loginResult) {
+                    Log.v(LOG_TAG, "Login successful");
 
-                AccessToken fbAccessToken = loginResult.getAccessToken();
-                onLoginFinish(fbAccessToken);
-            }
+                    onLogin();
+                }
 
-            @Override
-            public void onCancel() {
-                Log.v(LOG_TAG, "Login cancelled");
-            }
+                @Override
+                public void onCancel() {
+                    Log.v(LOG_TAG, "Login cancelled");
+                }
 
-            @Override
-            public void onError(FacebookException e) {
-                Log.v(LOG_TAG, "Login error: " + e.getCause().toString());
-            }
-        });
+                @Override
+                public void onError(FacebookException e) {
+                    Log.v(LOG_TAG, "Login error: " + e.getCause().toString());
+                }
+            });
+        }
     }
 
-    private void onLoginFinish(final AccessToken fbAccessToken) {
-        // If user's first time using application, go to the setup activity,
-        // else proceed directly to the main activity
-        SharedPreferences prefs = PreferenceManager
-            .getDefaultSharedPreferences(getApplicationContext());
-        Boolean firstRun = prefs.getBoolean("first_run", true);
-        if (firstRun) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private boolean isLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return (accessToken != null);
+    }
+
+    private void onLogin() {
+        if (isFirstRun()) {
+            AccessToken fbAccessToken = AccessToken.getCurrentAccessToken();
             GraphRequest request = GraphRequest.newMeRequest(fbAccessToken,
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -80,27 +90,31 @@ public class LoginActivity extends Activity {
                         Log.v(LOG_TAG, "Fb request response: " + response.toString());
 
                         String fbUserProfile = object.toString();
-
-                        Intent intent = new Intent(getBaseContext(), SetupActivity.class);
-                        intent.putExtra("fb_access_token", fbAccessToken.toString());
-                        intent.putExtra("fb_user_profile", fbUserProfile);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
+                        goToSetup(fbUserProfile);
                     }
                 });
             request.executeAsync();
         } else {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+            goToMain();
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+    private boolean isFirstRun() {
+        SharedPreferences prefs = PreferenceManager
+            .getDefaultSharedPreferences(getApplicationContext());
+        return prefs.getBoolean("first_run", true);
+    }
+
+    private void goToSetup(String fbUserProfile) {
+        Intent intent = new Intent(getBaseContext(), SetupActivity.class);
+        intent.putExtra("fb_user_profile", fbUserProfile);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

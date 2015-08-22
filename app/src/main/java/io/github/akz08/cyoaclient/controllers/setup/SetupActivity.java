@@ -21,9 +21,6 @@ public class SetupActivity extends Activity implements
     SetupFragment.OnSetupFragmentInteractionListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    private AuthenticationFragment authenticationFragment;
-    private ExistingUserFragment existingUserFragment;
-    private SetupFragment setupFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +35,8 @@ public class SetupActivity extends Activity implements
 
         // Retrieve the Fb access token and user profile from intent
         Bundle extras = getIntent().getExtras();
-        String fbAccessToken = extras.getString("fb_access_token");
         String fbUserProfile = extras.getString("fb_user_profile");
-//        String fbAccessToken = "0";
-//        String fbUserProfile = "{\"id\":\"347256552119472\",\"first_name\":\"Test\",\"timezone\":0,\"email\":\"test_wbckqia_user@tfbnw.net\",\"verified\":false,\"name\":\"Test User\",\"locale\":\"en_GB\",\"link\":\"https:\\/\\/www.facebook.com\\/app_scoped_user_id\\/347256552119472\\/\",\"last_name\":\"User\",\"gender\":\"male\",\"updated_time\":\"2014-11-16T14:40:19+0000\"}";
+        //String fbUserProfile = "{\"id\":\"347256552119472\",\"first_name\":\"Test\",\"timezone\":0,\"email\":\"test_wbckqia_user@tfbnw.net\",\"verified\":false,\"name\":\"Test User\",\"locale\":\"en_GB\",\"link\":\"https:\\/\\/www.facebook.com\\/app_scoped_user_id\\/347256552119472\\/\",\"last_name\":\"User\",\"gender\":\"male\",\"updated_time\":\"2014-11-16T14:40:19+0000\"}";
 
         // Create and persist the user record via GSON by using passed Fb profile data JSON string
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
@@ -53,7 +48,7 @@ public class SetupActivity extends Activity implements
         Log.v(LOG_TAG, "User record saved: " + gson.toJson(user));
         realm.close();
 
-        authenticationFragment = AuthenticationFragment.newInstance(fbAccessToken);
+        AuthenticationFragment authenticationFragment = AuthenticationFragment.newInstance();
         getFragmentManager().beginTransaction()
             .add(R.id.activity_setup, authenticationFragment)
             .commit();
@@ -63,12 +58,12 @@ public class SetupActivity extends Activity implements
     public void onAuthenticationFragmentInteraction(int authenticationStatus) {
         // Launch the progress fragment if the user exists, and the setup fragment otherwise
         if (authenticationStatus == 200) {
-            existingUserFragment = ExistingUserFragment.newInstance();
+            ExistingUserFragment existingUserFragment = ExistingUserFragment.newInstance();
             getFragmentManager().beginTransaction()
                 .replace(R.id.activity_setup, existingUserFragment)
                 .commit();
         } else {
-            setupFragment = SetupFragment.newInstance(true);
+            SetupFragment setupFragment = SetupFragment.newInstance(true);
             getFragmentManager().beginTransaction()
                 .replace(R.id.activity_setup, setupFragment)
                 .commit();
@@ -77,7 +72,7 @@ public class SetupActivity extends Activity implements
 
     @Override
     public void onExistingUserFragmentInteraction(boolean resumeProgress) {
-        setupFragment = SetupFragment.newInstance(resumeProgress);
+        SetupFragment setupFragment = SetupFragment.newInstance(resumeProgress);
         getFragmentManager().beginTransaction()
             .replace(R.id.activity_setup, setupFragment)
             .commit();
@@ -85,17 +80,15 @@ public class SetupActivity extends Activity implements
 
     @Override
     public void onSetupFragmentInteraction() {
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-
-        // Update shared preferences to indicate that app has been run before
+        // Update shared preferences to indicate that app has now been run before
         SharedPreferences prefs = PreferenceManager
             .getDefaultSharedPreferences(getApplicationContext());
         prefs.edit()
-             .putBoolean("first_run", false)
-             .apply();
+            .putBoolean("first_run", false)
+            .apply();
 
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(intent);
         finish();
     }
 }

@@ -4,10 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class User extends RealmObject {
+
+    // Attributes
+
     @SerializedName("api_key")
     private String apiKey;
     private String email;
@@ -61,4 +65,21 @@ public class User extends RealmObject {
 
     public boolean isVerified() { return verified; }
     public void setVerified(final boolean verified) { this.verified = verified; }
+
+    // Relationships
+
+    private RealmList<Character> characters;
+    private RealmList<Scene> scenes;
+    private RealmList<Message> messages;
+
+    public RealmList<Character> getCharacters() { return characters; }
+    public void setCharacters(final RealmList<Character> characters) {
+        this.characters = characters;
+    }
+
+    public RealmList<Scene> getScenes() { return scenes; }
+    public void setScenes(final RealmList<Scene> scenes) { this.scenes = scenes; }
+
+    public RealmList<Message> getMessages() { return messages; }
+    public void setMessages(final RealmList<Message> messages) { this.messages = messages; }
 }
