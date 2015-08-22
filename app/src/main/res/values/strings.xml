@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">CYOA Client</string>
+    <string name="app_server">http://192.168.1.3:8000</string>
+    <string name="facebook_app_id">725312227561858</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_setup">SetupActivity</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Setup activity -->
+
+    <string name="authentication_check">Checking...</string>
+
+    <string name="existing_user_info">Our records indicate that you have installed this app before.</string>
+    <string name="existing_user_resume_progress">Resume progress?</string>
+    <string name="existing_user_resume_progress_warning">(Note: by choosing not to resume, your progress will be reset permanently.)</string>
+    <string name="existing_user_continue">Continue</string>
+
+    <string name="setup">Setting up...</string>
 </resources>
